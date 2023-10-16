@@ -1,29 +1,69 @@
+"use client";
 import Image from "next/image";
-
+import Link from "next/link";
+import { useCartContext } from "../context/cartContext";
 export default function Product({ product }) {
+  const {
+    cart,
+    setCart,
+    increaseQuantity,
+    decreaseQuantity,
+    addItem,
+    removeItem,
+  } = useCartContext();
   return (
-    <div className="max-w-sm rounded overflow-hidden shadow-lg flex flex-col items-center ">
-      <Image
-        width={50}
-        height={50}
-        quality={50}
-        loading="lazy"
-        unoptimized="true"
-        className="w-72 hover:scale-110 transition ease-in-out duration-700 object-cover"
-        src={product.image}
-        alt="product image"
-      />
+    <div className="max-w-sm rounded overflow-hidden shadow-lg flex flex-col items-center justify-between">
+      <Link href={`/catalogo/${product.type}/${product._id}`}>
+        <Image
+          width={50}
+          height={50}
+          loading="lazy"
+          unoptimized="true"
+          className="w-72 h-96 hover:scale-110 transition ease-in-out duration-700 object-cover"
+          src={product.image}
+          alt="product image"
+        />
+      </Link>
       <div className="px-6 py-4 pt-6">
-        <div className="font-bold text-xl mb-2 text-center">{product.name}</div>
+        <Link href={`/catalogo/${product._id}`}>
+          <div className="font-bold text-xl mb-2 text-center">
+            {product.name}
+          </div>
+        </Link>
         <p className="text-gray-700 text-base text-center">
-          {product.description}
+          <span>R$</span>
+          {product.price}
         </p>
       </div>
-      <div className="px-6  pb-2 ">
-        <button className="inline-block bg-verde rounded-xl px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-          {" "}
-          adicionar ao carrinho
-        </button>
+      <div className="text-center   w-full bg-verde center btn-hover ">
+        {cart && cart.items.find((item) => item._id === product._id) ? (
+          <div>
+            <button
+              onClick={() => {
+                decreaseQuantity(product);
+              }}
+            >
+              -
+            </button>
+            <span>
+              {cart?.items.find((item) => item._id === product._id).quantity}
+            </span>
+            <button
+              onClick={() => {
+                increaseQuantity(product);
+              }}
+            >
+              +
+            </button>
+          </div>
+        ) : (
+          <button
+            className="  rounded-sm   text-sm font-semibold text-gray-700 py-3 "
+            onClick={() => addItem(product)}
+          >
+            adicionar ao carrinho
+          </button>
+        )}
       </div>
     </div>
   );

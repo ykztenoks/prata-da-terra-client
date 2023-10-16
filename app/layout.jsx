@@ -1,7 +1,9 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
-import Navbar from "../components/Navbar";
 import { Suspense } from "react";
+import { AuthProvider } from "../context/authContext";
+import { CartProvider } from "../context/cartContext";
+import Navbar from "../components/Navbar";
 import Loading from "./loading";
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,9 +16,13 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Navbar />
+        <AuthProvider>
+          <CartProvider>
+            <Navbar />
 
-        <Suspense fallback={<Loading />}>{children}</Suspense>
+            <Suspense fallback={<Loading />}>{children}</Suspense>
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );

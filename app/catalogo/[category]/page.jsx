@@ -1,9 +1,11 @@
 import axios from "axios";
-import Product from "../../components/Product.jsx";
+import Product from "../../../components/Product.jsx";
 async function fetchByCategory(category) {
   if (category === "aneis") category = "anel";
   if (category === "colares") category = "colar";
-  const res = await axios.get(`http://127.0.0.1:8080/products/${category}`);
+  const res = await axios.get(
+    `http://127.0.0.1:8080/products/category/${category}`
+  );
 
   if (res.status !== 200) {
     throw new Error("Erro ao buscar produtos por categoria");
