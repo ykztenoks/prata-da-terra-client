@@ -43,3 +43,18 @@ input:focus {
 .border {
   @apply border-[1px] rounded-md border-solid border-slate-400;
 }
+::-webkit-scrollbar {
+  @apply w-[5px];
+}
+
+/* Track */
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  @apply bg-verde border-r-verde;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

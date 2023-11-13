@@ -82,7 +82,7 @@ export default function Create() {
 
   return (
     userData && (
-      <div className="  flex flex-col lg:flex-row gap-12">
+      <div className=" flex flex-col lg:flex-row gap-12">
         <div className=" flex flex-col justify-center items-center w-3/3 h-screen lg:w-1/3 ">
           <p className="text-slate-300 text-6xl absolute font-extralight">
             Criar um <br />

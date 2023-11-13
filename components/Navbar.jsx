@@ -3,13 +3,24 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useAuthContext } from "../context/authContext";
-import { useEffect } from "react";
-
+import { useEffect, useState } from "react";
+import DarkModeButton from "../components/DarkMode";
+import { SlMagnifier } from "react-icons/sl";
+import {
+  AiOutlineHeart,
+  AiOutlineShoppingCart,
+  AiOutlineUser,
+} from "react-icons/ai";
 const Navbar = () => {
   const { token, userData } = useAuthContext();
+  const [mounted, setMouted] = useState(false);
 
+  useEffect(() => {
+    setMouted(true);
+  }, []);
+  if (!mounted) return null;
   return (
-    <nav className="min-w-screen flex flex-col bg-white shadow-slate-800  drop-shadow-md">
+    <nav className="min-w-screen flex flex-col shadow-slate-800  drop-shadow-md mb-20">
       <div className="flex justify-evenly items-center w-full">
         <div className="image-container">
           <Link href="/">
@@ -24,19 +35,12 @@ const Navbar = () => {
             />
           </Link>
         </div>
-        <div className="">
-          <div className="flex gap-2 justify-center">
-            <Image
-              src="/images/magnifier.png"
-              alt="magnifier"
-              width={100}
-              height={100}
-              quality={100}
-              className="h-8 w-8"
-            />
+        <div className="w-1/3 ">
+          <div className="flex w-auto gap-4 justify-center">
+            <SlMagnifier />
             <input
               type="text"
-              className="bg-transparent border-b-[1.4px] border-black focus:border-none text-center h-6"
+              className="bg-transparent mb-4 border-b-[1.4px]  focus:border-none text-center h-6"
               maxLength={36}
             />
           </div>
@@ -54,35 +58,15 @@ const Navbar = () => {
         </div>
         <div className=" w-auto center">
           <Link href={token ? "/profile" : "/auth/login"} className="center">
-            <Image
-              src="/images/user.png"
-              alt="user icon"
-              width={50}
-              height={50}
-              priority
-              className="w-6 h-6 ml-16 object-contain "
-            />
+            <AiOutlineUser size={28} className="ml-12" />
           </Link>
           <Link href="/cart" className="center">
-            <Image
-              src="/images/shopping-cart.png"
-              alt="user icon"
-              width={50}
-              height={50}
-              priority
-              className="w-6 h-6 ml-16 object-contain "
-            />
+            <AiOutlineShoppingCart size={28} className="ml-12" />
           </Link>
           <Link href={"/profile/favorites"} className="center">
-            <Image
-              src="/images/heart.png"
-              alt="user icon"
-              width={50}
-              height={50}
-              priority
-              className="w-6 h-6 ml-16 object-contain "
-            />
+            <AiOutlineHeart size={28} className="ml-12" />
           </Link>
+          <DarkModeButton />
         </div>
       </div>
       <div

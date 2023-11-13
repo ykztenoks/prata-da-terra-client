@@ -12,9 +12,11 @@ async function catalogo() {
   const products = await fetchProducts();
   return (
     <div className="flex flex-wrap p-8 gap-8 w-full overflow-hidden justify-center">
-      {products.map((product, i) => (
-        <Product product={product} key={i} />
-      ))}
+      {products
+        .filter((product) => product.inStock)
+        .map((product, i) => (
+          <Product product={product} key={i} />
+        ))}
     </div>
   );
 }

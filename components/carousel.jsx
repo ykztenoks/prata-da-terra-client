@@ -18,7 +18,7 @@ export default function Carousel() {
         disableOnInteraction: false,
       }}
       modules={[Pagination, Autoplay, Navigation]}
-      className="h-[50vh] center w-[50vw]"
+      className="h-[80vh] center w-[85vw]"
       style={{
         "--swiper-pagination-color": "#75B12C",
         "--swiper-pagination-bullet-inactive-color": "#999999",
@@ -33,7 +33,7 @@ export default function Carousel() {
           height={100}
           width={100}
           alt="carousel item"
-          className="w-[100%] h-[100%]  block"
+          className="w-[100%] h-[100%] object-cover block"
           unoptimized="true"
         />
       </SwiperSlide>
