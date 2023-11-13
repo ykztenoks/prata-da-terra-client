@@ -2,6 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useCartContext } from "../context/cartContext";
+import { useAuthContext } from "../context/authContext";
 export default function Product({ product }) {
   const {
     cart,
@@ -11,6 +12,7 @@ export default function Product({ product }) {
     addItem,
     removeItem,
   } = useCartContext();
+  const { userData } = useAuthContext();
   return (
     <div className="max-w-sm rounded overflow-hidden shadow-lg flex flex-col items-center justify-between">
       <Link href={`/catalogo/${product.type}/${product._id}`}>
@@ -20,12 +22,12 @@ export default function Product({ product }) {
           loading="lazy"
           unoptimized="true"
           className="w-72 h-96 hover:scale-110 transition ease-in-out duration-700 object-cover"
-          src={product.image}
+          src={product.images[0]}
           alt="product image"
         />
       </Link>
       <div className="px-6 py-4 pt-6">
-        <Link href={`/catalogo/${product._id}`}>
+        <Link href={`/catalogo/${product.type}/${product._id}`}>
           <div className="font-bold text-xl mb-2 text-center">
             {product.name}
           </div>
@@ -36,7 +38,9 @@ export default function Product({ product }) {
         </p>
       </div>
       <div className="text-center   w-full bg-verde center btn-hover ">
-        {cart && cart.items.find((item) => item._id === product._id) ? (
+        {cart &&
+        cart.items &&
+        cart.items.find((item) => item._id === product._id) ? (
           <div>
             <button
               onClick={() => {

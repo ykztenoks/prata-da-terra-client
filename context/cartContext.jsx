@@ -13,6 +13,14 @@ export function CartProvider({ children }) {
   const { userData } = useAuthContext();
   const router = useRouter();
 
+  const updateCartDB = async () => {
+    try {
+      await api.put(`/carts/${cart._id}`, cart);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const addItem = (item) => {
     if (!userData) return router.push("/auth/login");
     cart
@@ -28,7 +36,7 @@ export function CartProvider({ children }) {
   const removeItem = (item) => {
     setCart((prev) => ({
       ...prev,
-      items: [prev.items.filter((element) => element._id !== item._id)],
+      items: prev.items.filter((element) => element._id !== item._id),
     }));
   };
 
@@ -45,11 +53,14 @@ export function CartProvider({ children }) {
 
   const decreaseQuantity = (item) => {
     const product = cart.items.find((element) => element._id === item._id);
-    product.quantity === 1
+    product && product.quantity === 1
       ? removeItem(item)
       : setCart((prev) => ({
           ...prev,
-          items: [...prev.items, (product.quantity -= 1)],
+          items: prev.items.map((element) => {
+            if (element._id === item._id) element.quantity -= 1;
+            return element;
+          }),
         }));
   };
 
@@ -72,6 +83,7 @@ export function CartProvider({ children }) {
 
   useEffect(() => {
     console.log(cart);
+    cart && updateCartDB();
   }, [cart]);
 
   return (

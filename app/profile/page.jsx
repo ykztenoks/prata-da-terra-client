@@ -4,10 +4,12 @@ import api from "../../lib/api";
 import Loading from "../loading";
 import { useAuthContext } from "../../context/authContext";
 import { useRouter } from "next/navigation";
+import { useCartContext } from "../../context/cartContext";
 export default function Profile() {
   const [user, setUser] = useState(null);
   const router = useRouter();
   const { logout } = useAuthContext();
+  const { setCart } = useCartContext();
 
   useEffect(() => {
     async function getProfile() {
@@ -17,6 +19,7 @@ export default function Profile() {
       } catch (error) {
         if (error.response.status === 401) {
           localStorage.clear();
+          setCart(null);
           router.push("/auth/login");
         }
         console.log(error);

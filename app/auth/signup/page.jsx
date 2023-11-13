@@ -19,10 +19,7 @@ export default function Signup() {
     e.preventDefault();
 
     try {
-      const res = await axios.post(
-        "http://127.0.0.1:8080/user/signup",
-        userdata
-      );
+      await axios.post("http://127.0.0.1:8080/user/signup", userdata);
 
       router.push("/auth/login");
     } catch (error) {
@@ -152,7 +149,7 @@ export default function Signup() {
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Já tem uma conta?{" "}
                 <Link
-                  href="/auth/signup"
+                  href="/auth/login"
                   className="font-medium text-verde hover:underline dark:text-primary-500"
                 >
                   Faça o login!

@@ -29,7 +29,7 @@ export default function ProductDetail({ params }) {
               <div className="sticky top-0 z-50 overflow-hidden ">
                 <div className="relative mb-6 lg:mb-10 lg:h-2/4 ">
                   <Image
-                    src={product.image}
+                    src={product.images[0]}
                     alt=""
                     width={100}
                     height={100}
