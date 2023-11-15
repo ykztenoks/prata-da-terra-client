@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
+import api from "../../../lib/api";
 import Link from "next/link";
 
 export default function Signup() {
@@ -19,7 +19,7 @@ export default function Signup() {
     e.preventDefault();
 
     try {
-      await axios.post("http://127.0.0.1:8080/user/signup", userdata);
+      await api.post("/user/signup", userdata);
 
       router.push("/auth/login");
     } catch (error) {

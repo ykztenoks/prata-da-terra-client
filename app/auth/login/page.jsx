@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthContext } from "../../../context/authContext";
 import Link from "next/link";
-import axios from "axios";
+import api from "../../../lib/api";
 
 export default function Login() {
   const [userdata, setUserdata] = useState({
@@ -18,10 +18,7 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const res = await axios.post(
-        "http://127.0.0.1:8080/user/login",
-        userdata
-      );
+      const res = await api.post("/user/login", userdata);
 
       setUserData(res.data.user);
       authorize(res.data.token);

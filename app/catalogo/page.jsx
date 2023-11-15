@@ -1,7 +1,7 @@
-import axios from "axios";
 import Product from "../components/Product";
+import api from "../../lib/api";
 async function fetchProducts() {
-  const res = await axios.get("http://127.0.0.1:8080/products");
+  const res = await api.get("/products");
   if (res.status !== 200) {
     throw new Error("Erro ao buscar produtos");
   }
