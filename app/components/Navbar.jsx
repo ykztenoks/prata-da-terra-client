@@ -2,9 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useAuthContext } from "../context/authContext";
+import { useAuthContext } from "../../context/authContext";
 import { useEffect, useState } from "react";
-import DarkModeButton from "../components/DarkMode";
+import DarkModeButton from "./DarkMode";
 import { SlMagnifier } from "react-icons/sl";
 import {
   AiOutlineHeart,

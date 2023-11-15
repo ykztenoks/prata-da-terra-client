@@ -1,6 +1,6 @@
 "use client";
 import { useCartContext } from "../../context/cartContext";
-import CartItems from "../../components/CartItems";
+import CartItems from "../components/CartItems";
 export default function Cart() {
   const { cart, setCart, removeItem, increaseQuantity, decreaseQuantity } =
     useCartContext();

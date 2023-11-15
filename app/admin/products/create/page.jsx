@@ -2,11 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { isAdmin } from "../../../../lib/isAdmin";
-import FileUpload from "../../../../components/UploadInput";
+import FileUpload from "../../components/UploadInput";
+import { useAuthContext } from "../../../../context/authContext";
 import { Image } from "next/dist/client/image-component";
 import api from "../../../../lib/api";
-import { useAuthContext } from "../../../../context/authContext";
 
 export default function Create() {
   const [loading, setLoading] = useState(false);

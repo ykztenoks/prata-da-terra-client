@@ -1,5 +1,5 @@
 import axios from "axios";
-import Product from "../../../components/Product.jsx";
+import Product from "../../components/Product";
 async function fetchByCategory(category) {
   if (category === "aneis") category = "anel";
   if (category === "colares") category = "colar";

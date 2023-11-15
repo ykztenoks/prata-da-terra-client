@@ -1,8 +1,8 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useCartContext } from "../context/cartContext";
-import { useAuthContext } from "../context/authContext";
+import { useCartContext } from "../../context/cartContext";
+import { useAuthContext } from "../../context/authContext";
 export default function Product({ product }) {
   const {
     cart,
