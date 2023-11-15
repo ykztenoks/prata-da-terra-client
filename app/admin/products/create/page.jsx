@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import FileUpload from "../../components/UploadInput";
+import FileUpload from "../../../components/UploadInput";
 import { useAuthContext } from "../../../../context/authContext";
 import { Image } from "next/dist/client/image-component";
 import api from "../../../../lib/api";
