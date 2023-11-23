@@ -30,16 +30,16 @@ export default function ProductDetail({ params }) {
     product && (
       <main className="min-h-[90vh] center flex-col lg:flex-row">
         <section className="center w-screen flex-col lg:flex-row">
-          <div className="center w-2/3 flex-col-reverse lg:flex-row ">
-            <div className="w-full grid lg:grid-cols-1 grid-cols-4 mb-12 lg:mb-0  ">
+          <div className="center w-3/4 flex-col-reverse lg:flex-row ">
+            <div className="lg:w-1/3 grid lg:grid-cols-1 grid-cols-4 mb-12  lg:mb-0  p-6 gap-4">
               {product.images &&
                 product.images.map((src, i) => (
                   <Image
                     key={i}
                     src={src}
                     alt=""
-                    width={50}
-                    height={50}
+                    width={100}
+                    height={100}
                     onClick={() => setSelectedImg(src)}
                     unoptimized="true"
                     loading="lazy"
@@ -47,7 +47,7 @@ export default function ProductDetail({ params }) {
                   />
                 ))}
             </div>
-            <div className=" center">
+            <div className="w-full lg:p-12 center ">
               <Image
                 src={selectedImg}
                 alt=""
@@ -73,8 +73,9 @@ export default function ProductDetail({ params }) {
             <div className="lg:w-full center ">
               {userData && userData.role === "ADMIN" ? (
                 <Link href={`/admin/products/editar/${product._id}`}>
-                  {" "}
-                  Editar produto{" "}
+                  <button className="bg-verde w-[100%] p-2 rounded-sm">
+                    Oi! Quer editar esse produto?
+                  </button>
                 </Link>
               ) : cart &&
                 cart.items &&
@@ -112,10 +113,13 @@ export default function ProductDetail({ params }) {
                 </button>
               )}
             </div>
-
-            <label htmlFor="frete">CALCULAR FRETE</label>
-            <input type="text" name="frete" />
-            <button>CONSULTAR</button>
+            <label htmlFor="frete" className="font-bold mr-4 text-start">
+              CALCULAR FRETE
+            </label>
+            <div>
+              <input type="text" name="frete" />
+              <button>CONSULTAR</button>
+            </div>
           </div>
         </section>
         <section></section>

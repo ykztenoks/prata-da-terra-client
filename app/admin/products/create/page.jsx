@@ -30,8 +30,10 @@ export default function Create() {
   const router = useRouter();
 
   useEffect(() => {
-    userData && userData.role === "ADMIN" ? null : router.push("/");
-  }, []);
+    if (userData) {
+      userData.role === "ADMIN" ? null : router.push("/");
+    }
+  }, [userData]);
 
   useEffect(() => {
     console.log(newProd);
@@ -64,6 +66,7 @@ export default function Create() {
       const res = await api.post("/products/create", {
         ...newProd,
         tags: newProd.tags[0].split(","),
+        size: newProd.size[0],
         images: images,
       });
       console.log("product created 😮", res.data);
