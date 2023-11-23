@@ -75,7 +75,7 @@ const FileUpload = ({ setFiles, files }) => {
         <input
           type="file"
           multiple
-          required
+          name="images"
           ref={fileRef}
           className="hidden"
           onChange={handleFileSelect}

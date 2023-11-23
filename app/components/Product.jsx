@@ -34,13 +34,18 @@ export default function Product({ product }) {
         </Link>
         <p className="text-gray-700 text-base text-center">
           <span>R$</span>
-          {product.price}
+          {product.price.toFixed(2)}
         </p>
       </div>
       <div className="text-center   w-full bg-verde center btn-hover ">
-        {cart &&
-        cart.items &&
-        cart.items.find((item) => item._id === product._id) ? (
+        {userData && userData.role === "ADMIN" ? (
+          <Link href={`/admin/products/editar/${product._id}`}>
+            {" "}
+            Editar produto{" "}
+          </Link>
+        ) : cart &&
+          cart.items &&
+          cart.items.find((item) => item._id === product._id) ? (
           <div>
             <button
               onClick={() => {

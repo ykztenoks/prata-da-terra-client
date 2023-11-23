@@ -1,32 +1,86 @@
 "use client";
 import { useCartContext } from "../../context/cartContext";
 import CartItems from "../components/CartItems";
+import { useState, useEffect } from "react";
 export default function Cart() {
   const { cart, setCart, removeItem, increaseQuantity, decreaseQuantity } =
     useCartContext();
+  const [price, setPrice] = useState(0);
+
+  useEffect(() => {
+    cart &&
+      cart.items.length &&
+      setPrice(
+        cart.items.reduce((acc, product) => {
+          return (acc += product.price);
+        }, 0)
+      );
+  }, [cart]);
+
+  useEffect(() => {
+    console.log(price);
+  }, [price]);
 
   return cart && cart.items.length ? (
-    <div className="flex justify-center w-screen  mt-28">
-      <div className="center  ">
-        <table>
-          <thead className="center w-[100%]">
-            <tr className="w-[100%]">
-              <th className="w-72 ">Pedido</th>
-            </tr>
+    <div className="flex justify-center items-center lg:items-baseline w-screen lg:flex-row flex-col  mt-28 gap-6 min-h-screen">
+      <div class="relative overflow-x-auto lg:w-2/5">
+        <table class="w-full text-sm text-left rtl:text-right ">
+          <thead class="text-xs  uppercase  border-b  ">
             <tr>
-              <th className="w-40">Quantidade</th>
-              <th>Preço</th>
+              <th scope="col" class="px-6 py-3">
+                PRODUTO
+              </th>
+              <th scope="col" class="px-6 py-3">
+                QUANTIDADE
+              </th>
+
+              <th scope="col" class="px-6 py-3">
+                PREÇO
+              </th>
             </tr>
           </thead>
-          <tbody className="w-[100%]">
+          <tbody>
             {cart.items.map((product, i) => (
-              <CartItems
-                key={i}
-                name={product.name}
-                price={product.price}
-                quantity={product.quantity}
-                image={product.image}
-              />
+              <tr class=" border-b  " key={i}>
+                <th
+                  scope="row"
+                  class="px-6 py-4 font-medium  whitespace-nowrap "
+                >
+                  {product.name}
+                </th>
+
+                <td class="px-6 py-4">
+                  {cart &&
+                    cart.items &&
+                    cart.items.find((item) => item._id === product._id) && (
+                      <div className="flex justify-between w-16">
+                        <button
+                          className="bg-verde w-4"
+                          onClick={() => {
+                            decreaseQuantity(product);
+                          }}
+                        >
+                          -
+                        </button>
+                        <span>
+                          {
+                            cart?.items.find((item) => item._id === product._id)
+                              .quantity
+                          }
+                        </span>
+                        <button
+                          className="bg-verde w-4"
+                          onClick={() => {
+                            increaseQuantity(product);
+                          }}
+                        >
+                          +
+                        </button>
+                      </div>
+                    )}
+                </td>
+                <td class="px-6 py-4">{product.price}</td>
+              </tr>
             ))}
           </tbody>
         </table>
@@ -53,27 +107,22 @@ export default function Cart() {
           <button>continuar comprando</button>
         </div>
       </div> */}
-
-      <div className="mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-0 md:w-1/3 sticky top-0">
-        <div className="mb-2 flex justify-between">
-          <p className="text-gray-700">Subtotal</p>
-          <p className="text-gray-700">$129.99</p>
+      <div className="w-1/5">
+        <h3 className="border-b">RESUMO DO PEDIDO</h3>
+        <div>
+          <span>Subtotal</span>
+          <span>R$ {price.toFixed(2)}</span>
         </div>
-        <div className="flex justify-between">
-          <p className="text-gray-700">Shipping</p>
-          <p className="text-gray-700">$4.99</p>
+        <div>
+          <input type="text" placeholder="CUPOM" />
+          <button className="bg-verde">RESGATAR</button>
         </div>
-        <hr className="my-4" />
-        <div className="flex justify-between">
-          <p className="text-lg font-bold">Total</p>
-          <div className="">
-            <p className="mb-1 text-lg font-bold">$134.98 USD</p>
-            <p className="text-sm text-gray-700">including VAT</p>
-          </div>
+        <div>
+          <span>TOTAL</span>
+          <span>R$ {price.toFixed(2)}</span>
         </div>
-        <button className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">
-          Check out
-        </button>
+        <button>FINALIZAR</button>
+        <button>CONTINUAR COMPRANDO</button>
       </div>
     </div>
   ) : (

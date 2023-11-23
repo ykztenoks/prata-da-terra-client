@@ -1,7 +1,8 @@
 import Product from "../components/Product";
-import api from "../../lib/api";
+import axios from "axios";
 async function fetchProducts() {
-  const res = await api.get("/products");
+  const res = await axios.get(process.env.NEXT_PUBLIC_SERVER_URL + "/products");
+
   if (res.status !== 200) {
     throw new Error("Erro ao buscar produtos");
   }

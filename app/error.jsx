@@ -1,9 +1,16 @@
 "use client"; // Error components must be Client Components
 
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Error({ error, reset }) {
+  const router = useRouter();
   useEffect(() => {
+    if (
+      error.message.includes("_lib_api__WEBPACK_IMPORTED_MODULE_2__.default")
+    ) {
+      router.push("/auth/login");
+    }
     // Log the error to an error reporting service
     console.log("erro aqui > ❌", error.message);
   }, [error]);

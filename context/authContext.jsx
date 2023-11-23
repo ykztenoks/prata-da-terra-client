@@ -3,6 +3,7 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import { useRouter } from "next/navigation";
 import api from "../lib/api";
+import axios from "axios";
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
@@ -20,15 +21,16 @@ export function AuthProvider({ children }) {
     }
     try {
       const response = await api.get("/user/profile");
+
       setUserData(response.data);
       setToken(jwt);
       setLoggedIn(true);
       return true;
     } catch (error) {
-      console.log(error);
-      setLoggedIn(null);
+      if (error.response.status === 401) setLoggedIn(null);
       setToken(null);
       setUserData(null);
+      router.push("/auth/login");
       return false;
     }
   };

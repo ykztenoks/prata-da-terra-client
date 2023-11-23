@@ -2,16 +2,17 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import FileUpload from "../../../components/UploadInput";
-import { useAuthContext } from "../../../../context/authContext";
+import FileUpload from "../../../../components/UploadInput";
+import { useAuthContext } from "../../../../../context/authContext";
 import { Image } from "next/dist/client/image-component";
-import api from "../../../../lib/api";
+import api from "../../../../../lib/api";
 
-export default function Create() {
+function EditarProduto({ params }) {
+  console.log(params.id);
   const [loading, setLoading] = useState(false);
   const { userData } = useAuthContext();
   const [files, setFiles] = useState([]);
-  const [newProd, setNewProd] = useState({
+  const [product, setProduct] = useState({
     name: "",
     price: 0,
     images: [],
@@ -34,8 +35,19 @@ export default function Create() {
   }, []);
 
   useEffect(() => {
-    console.log(newProd);
-  }, [newProd]);
+    const fetchProduct = async (id) => {
+      try {
+        const response = await api.get(`/products/${id}`);
+
+        setProduct(response.data);
+      } catch (error) {
+        console.log(error);
+        return "Erro ao buscar produto";
+      }
+    };
+
+    fetchProduct(params.id);
+  }, [params]);
 
   const handleUpload = async (e) => {
     e.preventDefault();
@@ -46,35 +58,48 @@ export default function Create() {
       const formData = new FormData();
       formData.append("picture", file);
       const response = await api.post(
-        `/upload/image/${newProd.type}`,
+        `/upload/image/${product.type}`,
         formData
       );
 
       result.push(response.data.url);
     }
 
-    setNewProd((prev) => ({ ...prev, images: [...prev.images, ...result] }));
+    setProduct((prev) => ({ ...prev, images: [...prev.images, ...result] }));
     console.log("result!!!!!!!!!!", result);
     await handleSubmit(result);
     return;
   };
 
+  const handleDelete = async () => {
+    try {
+      await api.delete(`/products/${params.id}`);
+      router.push("/catalogo");
+    } catch (error) {
+      console.log(error);
+      return "Erro ao deletar produto";
+    }
+  };
+
   const handleSubmit = async (images) => {
     try {
-      const res = await api.post("/products/create", {
-        ...newProd,
-        tags: newProd.tags[0].split(","),
-        images: images,
+      const res = await api.patch(`/products/${params.id}`, {
+        ...product,
+        tags: product.tags.length ? product.tags[0].split(",") : [],
+        images: images.length ? images : product.images,
       });
-      console.log("product created 😮", res.data);
+      console.log("product updated 😮", res.data);
       if (res) {
         setLoading(false);
-        router.push(`/catalogo/${res.data.type}/${res.data._id}`);
       }
     } catch (error) {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    console.log(product);
+  }, [product]);
 
   return (
     userData && (
@@ -106,8 +131,9 @@ export default function Create() {
               type="text"
               required
               name="name"
+              value={product.name}
               onChange={(e) =>
-                setNewProd((prev) => ({
+                setProduct((prev) => ({
                   ...prev,
                   [e.target.name]: e.target.value,
                 }))
@@ -124,8 +150,9 @@ export default function Create() {
               min={5}
               max={99999}
               required
+              value={product.price}
               onChange={(e) =>
-                setNewProd((prev) => ({
+                setProduct((prev) => ({
                   ...prev,
                   [e.target.name]: e.target.value,
                 }))
@@ -139,8 +166,9 @@ export default function Create() {
               type="text"
               name="description"
               required
+              value={product.description}
               onChange={(e) =>
-                setNewProd((prev) => ({
+                setProduct((prev) => ({
                   ...prev,
                   [e.target.name]: e.target.value,
                 }))
@@ -152,8 +180,9 @@ export default function Create() {
             </label>
             <select
               name="type"
+              value={product.type}
               onChange={(e) =>
-                setNewProd((prev) => ({
+                setProduct((prev) => ({
                   ...prev,
                   type: e.target.value,
                 }))
@@ -187,8 +216,9 @@ export default function Create() {
             <input
               type="text"
               name="style"
+              value={product.style}
               onChange={(e) =>
-                setNewProd((prev) => ({
+                setProduct((prev) => ({
                   ...prev,
                   [e.target.name]: e.target.value,
                 }))
@@ -201,8 +231,9 @@ export default function Create() {
             <input
               type="number"
               name="size"
+              value={product.size}
               onChange={(e) =>
-                setNewProd((prev) => ({
+                setProduct((prev) => ({
                   ...prev,
                   [e.target.name]: e.target.value,
                 }))
@@ -215,8 +246,9 @@ export default function Create() {
             <input
               type="text"
               name="stones"
+              value={product.stones}
               onChange={(e) =>
-                setNewProd((prev) => ({
+                setProduct((prev) => ({
                   ...prev,
                   [e.target.name]: e.target.value,
                 }))
@@ -229,8 +261,9 @@ export default function Create() {
             <input
               type="text"
               name="model"
+              value={product.model}
               onChange={(e) =>
-                setNewProd((prev) => ({
+                setProduct((prev) => ({
                   ...prev,
                   [e.target.name]: e.target.value,
                 }))
@@ -243,8 +276,9 @@ export default function Create() {
             <input
               type="text"
               name="closure"
+              value={product.closure}
               onChange={(e) =>
-                setNewProd((prev) => ({
+                setProduct((prev) => ({
                   ...prev,
                   [e.target.name]: e.target.value,
                 }))
@@ -261,7 +295,7 @@ export default function Create() {
                 name="newCollection"
                 value="true"
                 onChange={(e) =>
-                  setNewProd((prev) => ({
+                  setProduct((prev) => ({
                     ...prev,
                     [e.target.name]: e.target.value,
                   }))
@@ -278,7 +312,7 @@ export default function Create() {
                 name="newCollection"
                 value="false"
                 onChange={(e) =>
-                  setNewProd((prev) => ({
+                  setProduct((prev) => ({
                     ...prev,
                     [e.target.name]: e.target.value,
                   }))
@@ -298,7 +332,7 @@ export default function Create() {
                 name="inStock"
                 value="true"
                 onChange={(e) =>
-                  setNewProd((prev) => ({
+                  setProduct((prev) => ({
                     ...prev,
                     [e.target.name]: e.target.value,
                   }))
@@ -315,7 +349,7 @@ export default function Create() {
                 name="inStock"
                 value="false"
                 onChange={(e) =>
-                  setNewProd((prev) => ({
+                  setProduct((prev) => ({
                     ...prev,
                     [e.target.name]: e.target.value,
                   }))
@@ -332,8 +366,9 @@ export default function Create() {
             <input
               type="text"
               name="tags"
+              value={product.tags}
               onChange={(e) =>
-                setNewProd((prev) => ({
+                setProduct((prev) => ({
                   ...prev,
                   tags: [e.target.value],
                 }))
@@ -346,8 +381,9 @@ export default function Create() {
             <input
               type="number"
               name="discount"
+              value={product.discount}
               onChange={(e) =>
-                setNewProd((prev) => ({
+                setProduct((prev) => ({
                   ...prev,
                   [e.target.name]: e.target.value,
                 }))
@@ -379,7 +415,10 @@ export default function Create() {
             )}
           </div>
         </form>
+        <button onClick={() => handleDelete()}>Deletar produto</button>
       </div>
     )
   );
 }
+
+export default EditarProduto;
